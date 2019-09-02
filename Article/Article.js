@@ -85,6 +85,22 @@ const data = [
     thirdParagraph: `Hodor hodor - hodor... Hodor hodor hodor hodor. Hodor. Hodor! Hodor hodor, hodor hodor hodor hodor hodor; hodor hodor? Hodor!
           Hodor hodor, HODOR hodor, hodor hodor?! Hodor! Hodor hodor, HODOR hodor, hodor hodor, hodor, hodor hodor. Hodor, hodor.
           Hodor. Hodor, hodor, hodor. Hodor hodor... Hodor hodor hodor?! Hodor, hodor... Hodor hodor HODOR hodor, hodor hodor. Hodor.`
+  },
+  {
+    title: 'Sweet Yeehaw oComponents are pretty neat-o',
+    date: 'Sep 2nd, 2019',
+    firstParagraph: `Hodor hodor HODOR! Hodor hodor - hodor, hodor. Hodor hodor... Hodor hodor hodor; hodor hodor. Hodor hodor hodor, hodor, hodor
+          hodor. Hodor, hodor. Hodor. Hodor, hodor - hodor... Hodor hodor hodor; hodor HODOR hodor, hodor hodor?! Hodor hodor, hodor.
+          Hodor hodor hodor hodor hodor! Hodor hodor - HODOR hodor, hodor hodor hodor hodor hodor; hodor hodor? `,
+
+    secondParagraph: `Hodor, hodor. Hodor. Hodor, hodor, hodor. Hodor hodor, hodor. Hodor hodor, hodor, hodor hodor. Hodor! Hodor hodor, hodor;
+          hodor hodor hodor? Hodor, hodor. Hodor. Hodor, hodor - HODOR hodor, hodor hodor hodor! Hodor, hodor. Hodor. Hodor, HODOR
+          hodor, hodor hodor, hodor, hodor hodor. Hodor hodor - hodor - hodor... Hodor hodor hodor hodor hodor hodor hodor?! Hodor
+          hodor - hodor hodor hodor. Hodor. Hodor hodor... Hodor hodor hodor hodor hodor? `,
+
+    thirdParagraph: `Hodor hodor - hodor... Hodor hodor hodor hodor. Hodor. Hodor! Hodor hodor, hodor hodor hodor hodor hodor; hodor hodor? Hodor!
+          Hodor hodor, HODOR hodor, hodor hodor?! Hodor! Hodor hodor, HODOR hodor, hodor hodor, hodor, hodor hodor. Hodor, hodor.
+          Hodor. Hodor, hodor, hodor. Hodor hodor... Hodor hodor hodor?! Hodor, hodor... Hodor hodor HODOR hodor, hodor hodor. Hodor.`
   }
 ];
 
@@ -112,3 +128,43 @@ const data = [
   Step 5: Add a new article to the array. Make sure it is in the same format as the others. Refresh the page to see the new article.
 
 */
+
+function createNewsComponent(obj){
+  let articleContainer = document.createElement('div');
+  articleContainer.classList.add('article');
+
+  let articleHeader = document.createElement('h2');
+  articleHeader.textContent = `${obj.title}`;
+  
+  let articleDate = document.createElement('p');
+  articleDate.classList.add('date');
+  articleDate.textContent = `${obj.date}`;
+  
+  let articleText1 = document.createElement('p');
+  let articleText2 = document.createElement('p');
+  let articleText3 = document.createElement('p');
+  articleText1.textContent = `${obj.firstParagraph}`;
+  articleText2.textContent = `${obj.secondParagraph}`;
+  articleText3.textContent = `${obj.thirdParagraph}`;
+
+  let expandButton = document.createElement('button');
+  expandButton.classList.add('expandButton');
+  expandButton.textContent = 'Expand Article';
+  expandButton.addEventListener('click', () => {
+    expanded = !expanded;
+    expanded ? articleContainer.classList.add('article-open') : articleContainer.classList.remove('article-open');
+  });
+  
+  articleContainer.appendChild(articleHeader);
+  articleContainer.appendChild(articleDate);
+  articleContainer.appendChild(articleText1);
+  articleContainer.appendChild(articleText2);
+  articleContainer.appendChild(articleText3);
+  articleContainer.appendChild(expandButton);
+  
+ return articleContainer;
+};
+
+let expanded = false;
+let articlesContainer = document.querySelector('.articles');
+data.map(item => articlesContainer.appendChild(createNewsComponent(item)));
