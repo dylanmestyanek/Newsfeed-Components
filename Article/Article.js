@@ -128,6 +128,7 @@ const data = [
   Step 5: Add a new article to the array. Make sure it is in the same format as the others. Refresh the page to see the new article.
 
 */
+let expanded = false;
 
 function createNewsComponent(obj){
   let articleContainer = document.createElement('div');
@@ -149,22 +150,36 @@ function createNewsComponent(obj){
 
   let expandButton = document.createElement('button');
   expandButton.classList.add('expandButton');
-  expandButton.textContent = 'Expand Article';
+  expandButton.textContent = "Expand Article";
   expandButton.addEventListener('click', () => {
     expanded = !expanded;
-    expanded ? articleContainer.classList.add('article-open') : articleContainer.classList.remove('article-open');
+    if (expanded) {
+      articleContainer.classList.add('article-open'); 
+      expandButton.textContent = "Close Article";
+    } else { 
+      articleContainer.classList.remove('article-open');
+      expandButton.textContent = "Expand Article"
+    };
   });
-  
+
+  let readButton = document.createElement('button');
+  readButton.classList.add('readButton');
+  readButton.textContent = "Mark as Read";
+  readButton.addEventListener('click', (e) => {
+    e.target.parentNode.classList.add('hidden');
+    setTimeout(() => e.target.parentNode.style.display = 'none', 500)
+  })
+
   articleContainer.appendChild(articleHeader);
   articleContainer.appendChild(articleDate);
   articleContainer.appendChild(articleText1);
   articleContainer.appendChild(articleText2);
   articleContainer.appendChild(articleText3);
   articleContainer.appendChild(expandButton);
-  
- return articleContainer;
+  articleContainer.appendChild(readButton);
+
+  return articleContainer;
 };
 
-let expanded = false;
 let articlesContainer = document.querySelector('.articles');
 data.map(item => articlesContainer.appendChild(createNewsComponent(item)));
