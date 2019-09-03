@@ -165,9 +165,14 @@ function createNewsComponent(obj){
   let readButton = document.createElement('button');
   readButton.classList.add('readButton');
   readButton.textContent = "Mark as Read";
+
+  // When 'Mark as read' button is clicked, it adds 'hidden' class
+  // which makes it fade away, and then completely disappear after
+  // 500 ms.
   readButton.addEventListener('click', (e) => {
+    console.log(localStorage.articles)
     e.target.parentNode.classList.add('hidden');
-    setTimeout(() => e.target.parentNode.style.display = 'none', 500)
+    setTimeout(() => e.target.parentNode.style.display = 'none', 500);
   })
 
   articleContainer.appendChild(articleHeader);
@@ -183,3 +188,81 @@ function createNewsComponent(obj){
 
 let articlesContainer = document.querySelector('.articles');
 data.map(item => articlesContainer.appendChild(createNewsComponent(item)));
+
+
+// ============== STRETCH STUFF =============== //
+
+let articleForm = document.createElement('form');
+let formHeadline = document.createElement('h2');
+let formHeaderInput = document.createElement('input');
+let formDateInput = document.createElement('input');
+let formTextInput1 = document.createElement('textarea');
+let formTextInput2 = document.createElement('textarea');
+let formTextInput3 = document.createElement('textarea');
+let submitButton = document.createElement('input');
+let articleArray = localStorage.getItem('articles') ? JSON.parse(localStorage.getItem('articles')) : [];
+let localData = JSON.parse(localStorage.getItem('articles'));
+
+// Creates elements to make the form
+formHeadline.textContent = 'Create your Article:';
+articleForm.appendChild(formHeadline);
+
+formHeaderInput.placeholder = "Header";
+articleForm.appendChild(formHeaderInput);
+
+formDateInput.placeholder = "Publish Date";
+formDateInput.type = 'date';
+articleForm.appendChild(formDateInput);
+
+formTextInput1.placeholder = "Paragraph 1";
+articleForm.appendChild(formTextInput1);
+formTextInput2.placeholder = "Paragraph 2";
+articleForm.appendChild(formTextInput2);
+formTextInput3.placeholder = "Paragraph 3";
+articleForm.appendChild(formTextInput3);
+
+submitButton.type = 'submit';
+submitButton.classList.add('submitButton');
+articleForm.appendChild(submitButton);
+
+// Submits form, puts the new article on the Articles Container to display it
+// on the page, Adds the article to loca storage, and resets form values
+// to empty strings
+articleForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  // New article object using values from form inputs
+  let newArticle = {
+    title: formHeaderInput.value,
+    date: formDateInput.value,
+    firstParagraph: formTextInput1.value,
+    secondParagraph: formTextInput2.value,
+    thirdParagraph: formTextInput3.value
+  }
+
+  // Alert user if title, date, or paragraph1 are empty
+  if (newArticle.title == '' || newArticle.date == '' || newArticle.firstParagraph == ''){
+    alert('Please fill in a Title, Date, and Paragraph 1.')
+  } else {
+    articleArray.push(newArticle);
+    articlesContainer.appendChild(createNewsComponent(newArticle));
+  };
+  
+  // Resets all form values to empty strings
+  formHeaderInput.value = '';
+  formDateInput.value = '';
+  formTextInput1.value = '';
+  formTextInput2.value = '';
+  formTextInput3.value = '';
+  
+  localStorage.setItem('articles', JSON.stringify(articleArray));
+});
+
+document.body.appendChild(articleForm);
+
+// Loads all articles from local storage onto the page
+localData.forEach(article => {
+  articlesContainer.appendChild(createNewsComponent(article));   
+});
+
+// localStorage.clear();
