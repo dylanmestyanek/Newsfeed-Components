@@ -32,4 +32,46 @@ let menuItems = [
 
   Step 6: add the menu component to the DOM.
   
-*/
+  */
+let menuOpen = false;
+let header = document.querySelector('.header');
+let menuButton = document.querySelector('.menu-button');
+let menuList = document.createElement('ul');
+let menuContainer = document.createElement('div');
+
+function createMenu(arr){
+  menuContainer.classList.add('menu');
+  
+  arr.map(item => {
+    let menuItem = document.createElement('li');
+    menuItem.textContent = `${item}`;
+    menuList.appendChild(menuItem);
+  });
+  
+  // Rotates hamburger button and slides menu in from the left
+  menuButton.addEventListener('click', () => {
+    menuOpen = !menuOpen;
+    menuButton.style.transform = `rotate(${menuOpen ? 90 : 0}deg)`;
+    menuButton.style.transition = `transform .3s`;
+    menuContainer.classList.toggle('menu--open');
+  });
+
+  // Shrinks hamburger button size when mouse clicking on it
+  menuButton.addEventListener('mousedown', () => menuButton.style.transform = "scale(.90)");
+  menuButton.addEventListener('mouseup', () => menuButton.style.transform = "scale(1)");
+  
+  menuContainer.appendChild(menuList);
+  return menuContainer;
+};
+
+header.appendChild(createMenu(menuItems));
+
+// If menu is open, clicking anywhere that is not the hamburger button will make 
+// the menu close, and rotate the hamburger button back to default position
+window.addEventListener('click', (e) => {
+  if (e.target !== (menuButton)) {
+    menuOpen = false;
+    menuContainer.classList.remove('menu--open');
+    menuButton.style.transform = `rotate(${menuOpen ? 90 : 0}deg)`;
+  };
+})
